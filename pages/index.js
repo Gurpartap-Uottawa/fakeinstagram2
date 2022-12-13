@@ -5,6 +5,7 @@ import { GraphQLClient, gql } from "graphql-request";
 import { useState } from "react";
 import BlogPost from "../components/BlogCard";
 import Image from "next/image";
+import Link from "next/link";
 
 const instacms = new GraphQLClient(
   "https://ca-central-1.cdn.hygraph.com/content/clbk2a6mw2oes01tfcxgz9ish/master"
@@ -40,6 +41,7 @@ export async function getStaticProps() {
     props: {
       posts,
     },
+    revalidate: 10,
   };
 }
 
@@ -54,14 +56,15 @@ export default function Home({ posts }) {
 
       <main className={styles.main}>
         {posts.map((post) => (
-          <div className={styles.card}>
-            <div className={styles.imgContainer}>
-              {post.instagramUser.username}
-              <Image src={post.picture.url} width="250" height="250" />
-              {post.likes}
-              {post.caption.text}
+          <Link href={"/posts/" + post.instagramUser.username}>
+            <div className={styles.card}>
+              <div className={styles.imgContainer}>
+                {post.instagramUser.username}
+                <Image src={post.picture.url} width="250" height="250" />
+                <b>{post.caption.text}</b>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </main>
     </div>
